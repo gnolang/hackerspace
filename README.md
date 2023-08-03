@@ -1,5 +1,7 @@
 # Hackerspace
 
+**Disclaimer: This repository is an experimental playground for creative ideas, projects, and collaborations. Nothing here is guaranteed to become an official point. For official matters, refer to the main repo at https://github.com/gnolang/gno.**
+
 Welcome to the Hackerspace repository! This is a dedicated place for tinkerers, builders, and experimenters to freely explore ideas, track projects, and pursue individual and collaborative initiatives with fewer constraints compared to the main repository.
 
 ## Goal
