@@ -4,25 +4,27 @@
 # In[ ]:
 
 
-import requests
+import nest_asyncio
+nest_asyncio.apply()
+import asyncio
+import aiohttp
 import pandas as pd
 
-def fetch_gas_data_infura(api_key, start_block, end_block):
+CONCURRENCY_LIMIT = 50
+semaphore = asyncio.Semaphore(CONCURRENCY_LIMIT)
+
+async def fetch_gas_data_for_block(session, api_key, block_num):
     base_url = "https://mainnet.infura.io/v3/" + api_key
     headers = {"Content-Type": "application/json"}
-    gas_data = []
+    payload = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "eth_getBlockByNumber",
+        "params": [hex(block_num), True]
+    }
 
-    for block_num in range(start_block, end_block + 1):
-        payload = {
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "eth_getBlockByNumber",
-            "params": [hex(block_num), True]
-        }
-
-        response = requests.post(base_url, headers=headers, json=payload)
-        data = response.json()
-
+    async with session.post(base_url, headers=headers, json=payload) as response:
+        data = await response.json()
         if data["result"]:
             block_gas_limit = int(data["result"]["gasLimit"], 16)
             block_gas_used = int(data["result"]["gasUsed"], 16)
@@ -31,20 +33,37 @@ def fetch_gas_data_infura(api_key, start_block, end_block):
             tx_gas_prices = [int(tx["gasPrice"], 16) for tx in data["result"]["transactions"]]
             median_gas_price = sorted(tx_gas_prices)[len(tx_gas_prices) // 2] if tx_gas_prices else 0
 
-            gas_data.append({
+            return {
                 "timestamp": timestamp, 
                 "block_gas_limit": block_gas_limit,
                 "block_gas_used": block_gas_used,
-                "median_gas_price": median_gas_price
-            })
+                "median_gas_price": median_gas_price,
+                "error": None
+            }
+        else:
+            return {
+                "timestamp": None,
+                "block_gas_limit": None,
+                "block_gas_used": None,
+                "median_gas_price": None,
+                "error": "No result in response"
+            }
 
-    return gas_data
+async def fetch_gas_data_infura(api_key, start_block, end_block):
+    tasks = []
+    async with aiohttp.ClientSession() as session:
+        for block_num in range(start_block, end_block + 1):
+            task = fetch_gas_data_for_block(session, api_key, block_num)
+            tasks.append(task)
+        return await asyncio.gather(*tasks)
 
 API_KEY = "INFURA_API_KEY"
 START_BLOCK = 15537393  
 END_BLOCK = 17971893  
 
-gas_data = fetch_gas_data_infura(API_KEY, START_BLOCK, END_BLOCK)
+gas_data = asyncio.run(fetch_gas_data_infura(API_KEY, START_BLOCK, END_BLOCK))
 df = pd.DataFrame(gas_data)
+df['median_gas_price_gwei'] = df['median_gas_price'] / 1e9
+df['percentage_used'] = df['block_gas_used'] / df['block_gas_limit']
+df = df[['timestamp', 'block_gas_limit', 'block_gas_used', 'percentage_used', 'median_gas_price', 'median_gas_price_gwei', 'error']]
 df.to_csv('ETH_historic_gas_data_infura.csv', index=False)
-
