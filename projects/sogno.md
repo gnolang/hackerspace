@@ -60,8 +60,6 @@ review and consider merges on the master branch.
 
 # Rough Plan
 
-Also include efforts relating to NatBind, GoDoc.
-
 Sogno starts from [native bindings](https://github.com/gnolang/gno/pull/859)
 being already merged & accepted as the way forward.
 
