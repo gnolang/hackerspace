@@ -227,7 +227,6 @@ type Method struct {}
 type StructField struct {}
 
 ```
-```
 
 ```go
 type valuePtr [2]uint32
