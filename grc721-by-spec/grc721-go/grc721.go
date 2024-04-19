@@ -49,7 +49,7 @@ func (nft Token) OwnerOf(tokenId string) std.Address {
 }
 
 func (nft Token) TransferFrom(from, to std.Address, tokenId string) {
-	caller := std.PrevRealm().Addr()
+	//caller := std.PrevRealm().Addr()
 
 	mustBeValid(to)
 	// caller must be:
@@ -60,8 +60,12 @@ func (nft Token) TransferFrom(from, to std.Address, tokenId string) {
 func (nft Token) Approve(to std.Address, tokenId string) {
 	caller := std.PrevRealm().Addr()
 
-	nft.requireOwner(caller, tokenId)
+	if caller == to {
+		panic("GRC721: cannot approve yourself")
+	}
+
 	mustBeValid(to)
+	nft.requireOwner(caller, tokenId)
 
 	nft.tokenApprovals.Set(tokenId, to)
 }
@@ -78,12 +82,7 @@ func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
 // View func - just return empty or error, do not panic?
 func (nft Token) GetApproved(tokenId string) std.Address {
 	_ = nft.mustBeOwned(tokenId)
-	approved, exists := nft.tokenApprovals.Get(tokenId)
-	if !exists {
-		return ""
-	}
-
-	return approved.(std.Address)
+	return nft.GetApproved(tokenId)
 }
 
 // View func - just return empty or error, do not panic?
@@ -100,8 +99,17 @@ func (nft Token) IsApprovedForAll(owner, operator std.Address) bool {
 
 func (nft Token) requireOwner(caller std.Address, tokenId string) {
 	if caller != nft.mustBeOwned(tokenId) {
-		panic("Token: not owner")
+		panic("GRC721: not owner")
 	}
+}
+
+func (nft Token) getApproved(tokenId string) std.Address {
+	approved, exists := nft.tokenApprovals.Get(tokenId)
+	if !exists {
+		return "" // panic instead?
+	}
+
+	return approved.(std.Address)
 }
 
 // mustBeValid panics if the given address is not valid
