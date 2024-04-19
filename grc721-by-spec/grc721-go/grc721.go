@@ -6,7 +6,7 @@ import (
 	"github.com/gnolang/gno/gnovm/stdlibs/std"
 )
 
-type GRC721 struct {
+type Token struct {
 	name              string
 	symbol            string
 	owners            *avl.Tree // tokenID > std.Address
@@ -16,8 +16,8 @@ type GRC721 struct {
 	tokenURIs         *avl.Tree // tokenID > URI
 }
 
-func NewGRC721Token(name, symbol string) *GRC721 {
-	return &GRC721{
+func NewGRC721Token(name, symbol string) *Token {
+	return &Token{
 		name:     name,
 		symbol:   symbol,
 		owners:   avl.NewTree(),
@@ -30,13 +30,11 @@ func NewGRC721Token(name, symbol string) *GRC721 {
 	}
 }
 
-func (nft GRC721) Name() string   { return nft.name }
-func (nft GRC721) Symbol() string { return nft.symbol }
+func (nft Token) Name() string   { return nft.name }
+func (nft Token) Symbol() string { return nft.symbol }
 
-func (nft GRC721) BalanceOf(owner std.Address) uint64 {
-	if !owner.IsValid() {
-		panic("owner address is not valid")
-	}
+func (nft Token) BalanceOf(owner std.Address) uint64 {
+	mustBeValid(owner)
 
 	balance, found := nft.balances.Get(owner.String())
 	if !found {
@@ -46,54 +44,77 @@ func (nft GRC721) BalanceOf(owner std.Address) uint64 {
 	return balance.(uint64)
 }
 
-func (nft GRC721) OwnerOf(tokenId string) std.Address {
-	return nft.owned(tokenId)
+func (nft Token) OwnerOf(tokenId string) std.Address {
+	return nft.mustBeOwned(tokenId)
 }
 
-func (nft GRC721) TransferFrom(from, to std.Address, tokenId string) {
-	if !to.IsValid() {
-		panic(ufmt.Errorf("%s %s", ErrGRC721InvalidReceiver, to))
-	}
+func (nft Token) TransferFrom(from, to std.Address, tokenId string) {
+	caller := std.PrevRealm().Addr()
 
-	if nft.owned(tokenId) != from {
-		panic(ufmt.Errorf("%s %s", ErrGRC721InvalidReceiver, to))
-	}
+	mustBeValid(to)
+	// caller must be:
+	// owner, approved, or operator
+
 }
 
-func (nft GRC721) Approve(to std.Address, tokenId string) {
+func (nft Token) Approve(to std.Address, tokenId string) {
 	caller := std.PrevRealm().Addr()
 
 	nft.requireOwner(caller, tokenId)
-	requireValid(to)
+	mustBeValid(to)
 
 	nft.tokenApprovals.Set(tokenId, to)
 }
 
-func (nft GRC721) SetApprovalForAll(operator std.Address, approved bool) {
-	//TODO implement me
-	panic("implement me")
+func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
+	caller := std.PrevRealm().Addr()
+	if caller == operator {
+		panic("GRC721: cannot set operator to yourself")
+	}
+
+	nft.operatorApprovals.Set(operatorKey(caller, operator), approved)
 }
 
-func (nft GRC721) GetApproved(tokenId string) std.Address {
-	//TODO implement me
-	panic("implement me")
+// View func - just return empty or error, do not panic?
+func (nft Token) GetApproved(tokenId string) std.Address {
+	_ = nft.mustBeOwned(tokenId)
+	approved, exists := nft.tokenApprovals.Get(tokenId)
+	if !exists {
+		return ""
+	}
+
+	return approved.(std.Address)
 }
 
-func (nft GRC721) IsApprovedForAll(owner, operator std.Address) {
-	//TODO implement me
-	panic("implement me")
-}
+// View func - just return empty or error, do not panic?
+func (nft Token) IsApprovedForAll(owner, operator std.Address) bool {
+	approved, exists := nft.operatorApprovals.Get(operatorKey(owner, operator))
+	if !exists || approved == false {
+		return false
+	}
 
-func (nft GRC721) TokenURI(tokenId string) string {
-	//TODO implement me
-	panic("implement me")
+	return true
 }
 
 // Helpers
 
-// owned panics if token is not owned by an address(does not exist)
-// if the token is owned, return the owner
-func (nft GRC721) owned(tokenId string) std.Address {
+func (nft Token) requireOwner(caller std.Address, tokenId string) {
+	if caller != nft.mustBeOwned(tokenId) {
+		panic("Token: not owner")
+	}
+}
+
+// mustBeValid panics if the given address is not valid
+func mustBeValid(address std.Address) {
+	if !address.IsValid() {
+		err := ufmt.Sprintf("GRC721: invalid address %s", address)
+		panic(err)
+	}
+}
+
+// mustBeOwned panics if token is not owned by an address (does not exist)
+// If the token is owned, mustBeOwned returns the owner of the token
+func (nft Token) mustBeOwned(tokenId string) std.Address {
 	owner, exists := nft.balances.Get(tokenId)
 	if !exists {
 		err := ufmt.Sprintf("GRC721: token with id %s does not exist", tokenId)
@@ -103,15 +124,12 @@ func (nft GRC721) owned(tokenId string) std.Address {
 	return owner.(std.Address)
 }
 
-func (nft GRC721) requireOwner(caller std.Address, tokenId string) {
-	if caller != nft.owned(tokenId) {
-		panic("GRC721: not owner")
-	}
+// checkAuthorized checks if address is either approved or ..?
+func checkAuthorized(address std.Address, tokenId string) {
+
 }
 
-func requireValid(address std.Address) {
-	if !address.IsValid() {
-		err := ufmt.Sprintf("GRC721: invalid address %s", address)
-		panic(err)
-	}
+// operatorKey is a helper to create the key for the operatorApproval tree
+func operatorKey(owner, operator std.Address) string {
+	return owner.String() + ":" + operator.String()
 }
