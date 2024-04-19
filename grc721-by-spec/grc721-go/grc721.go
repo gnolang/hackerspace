@@ -72,6 +72,8 @@ func (nft Token) Approve(to std.Address, tokenId string) {
 
 func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
 	caller := std.PrevRealm().Addr()
+	mustBeValid(operator)
+
 	if caller == operator {
 		panic("GRC721: cannot set operator to yourself")
 	}
@@ -82,7 +84,7 @@ func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
 // View func - just return empty or error, do not panic?
 func (nft Token) GetApproved(tokenId string) std.Address {
 	_ = nft.mustBeOwned(tokenId)
-	return nft.GetApproved(tokenId)
+	return nft.getApproved(tokenId)
 }
 
 // View func - just return empty or error, do not panic?
@@ -132,10 +134,37 @@ func (nft Token) mustBeOwned(tokenId string) std.Address {
 	return owner.(std.Address)
 }
 
-// checkAuthorized checks if address is either approved or ..?
-func checkAuthorized(address std.Address, tokenId string) {
+// checkAuthorized checks if spender is authorized to spend specified token on behalf of owner
+// Panics if token doesn't exist, or if spender is not authorized in any way
+func (nft Token) checkAuthorized(owner, spender std.Address, tokenId string) {
+	_ = nft.mustBeOwned(tokenId)
 
+	if !nft.isAuthorized(owner, spender, tokenId) {
+		str := ufmt.Sprintf("GRC721: %s is not authorized for %s", spender, tokenId)
+		panic(str)
+	}
 }
+
+// isAuthorized returns if the spender is authorized to transfer the specified token
+// Assumes addresses are valid and token exists
+func (nft Token) isAuthorized(owner, spender std.Address, tokenId string) bool {
+	return owner == spender ||
+		nft.IsApprovedForAll(owner, spender) ||
+		nft.getApproved(tokenId) == owner
+}
+
+///**
+// * @dev Returns whether `spender` is allowed to manage `owner`'s tokens, or `tokenId` in
+// * particular (ignoring whether it is owned by `owner`).
+// *
+// * WARNING: This function assumes that `owner` is the actual owner of `tokenId` and does not verify this
+// * assumption.
+// */
+//function _isAuthorized(address owner, address spender, uint256 tokenId) internal view virtual returns (bool) {
+//return
+//spender != address(0) &&
+//(owner == spender || isApprovedForAll(owner, spender) || _getApproved(tokenId) == spender);
+//}
 
 // operatorKey is a helper to create the key for the operatorApproval tree
 func operatorKey(owner, operator std.Address) string {
