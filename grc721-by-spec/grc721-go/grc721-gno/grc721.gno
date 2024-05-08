@@ -163,7 +163,7 @@ func mustBeValid(address std.Address) {
 // mustBeOwned panics if token is not owned by an address (does not exist)
 // If the token is owned, mustBeOwned returns the owner of the token
 func (nft Token) mustBeOwned(tokenId string) std.Address {
-	owner, exists := nft.balances.Get(tokenId)
+	owner, exists := nft.owners.Get(tokenId)
 	if !exists {
 		err := ufmt.Sprintf("GRC721: token with ID %s does not exist", tokenId)
 		panic(err)
@@ -205,16 +205,24 @@ func (nft Token) update(to std.Address, tokenId string, auth std.Address) std.Ad
 
 		// Set new balances
 		ownerNewBalance, _ := nft.balances.Get(from.String())
-		nft.balances.Set(from.String(), ownerNewBalance.(int64)-1)
+		nft.balances.Set(from.String(), ownerNewBalance.(uint64)-1)
 	}
 
 	if to != emptyAddress {
-		toBalance, _ := nft.balances.Get(to.String())
-		nft.balances.Set(to.String(), toBalance.(int64)+1)
+		toBalance, initialized := nft.balances.Get(to.String())
+		if !initialized {
+			nft.balances.Set(to.String(), uint64(1))
+		} else {
+			nft.balances.Set(to.String(), toBalance.(uint64)+1)
+		}
 	}
 
 	// Set new ownership
-	nft.owners.Set(tokenId, to.String())
+	nft.owners.Set(tokenId, to)
+
+	if _, exists := nft.owners.Get(tokenId); !exists {
+		panic("wtf")
+	}
 
 	std.Emit("Transfer", "from", from.String(), "to", to.String(), "tokenID", tokenId)
 
@@ -239,7 +247,7 @@ func (nft Token) approve(to std.Address, tokenId string, auth std.Address, emitE
 func (nft Token) ownerOf(tokenId string) std.Address {
 	owner, exists := nft.owners.Get(tokenId)
 	if !exists {
-		return ""
+		return emptyAddress
 	}
 
 	return owner.(std.Address)

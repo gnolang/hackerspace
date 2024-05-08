@@ -58,15 +58,15 @@ func TestBalanceOf(t *testing.T) {
 	exampleNFT.mint(addr1, "2")
 	exampleNFT.mint(addr2, "3")
 
-	//balanceAddr1 = exampleNFT.BalanceOf(addr1)
-	//balanceAddr2 := exampleNFT.BalanceOf(addr2)
+	balanceAddr1 = exampleNFT.BalanceOf(addr1)
+	balanceAddr2 := exampleNFT.BalanceOf(addr2)
 
-	//if balanceAddr1 != 2 {
-	//	t.Errorf("expected: (%d), got: (%d)", 2, balanceAddr1)
-	//}
-	//if balanceAddr2 != 1 {
-	//	t.Errorf("expected: (%d), got: (%d)", 1, balanceAddr2)
-	//}
+	if balanceAddr1 != 2 {
+		t.Errorf("expected: (%d), got: (%d)", 2, balanceAddr1)
+	}
+	if balanceAddr2 != 1 {
+		t.Errorf("expected: (%d), got: (%d)", 1, balanceAddr2)
+	}
 }
 
 func TestOwnerOf(t *testing.T) {
