@@ -35,5 +35,3 @@ type IGRC721 interface {
 	// SetTokenURI sets `tokenURI` as the tokenURI of `tokenId`
 	SetTokenURI(tokenId string, tokenURI string) string
 }
-
-const emptyAddress = std.Address("")

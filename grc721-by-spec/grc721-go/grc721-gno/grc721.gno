@@ -1,11 +1,9 @@
 package grc721
 
 import (
-	"std"
-	"strconv"
-
 	"gno.land/p/demo/avl"
 	"gno.land/p/demo/ufmt"
+	"std"
 )
 
 type Token struct {
@@ -19,6 +17,8 @@ type Token struct {
 }
 
 var _ IGRC721 = (*Token)(nil)
+
+const emptyAddress = std.Address("")
 
 func NewGRC721Token(name, symbol string) *Token {
 	return &Token{
@@ -82,7 +82,12 @@ func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
 	}
 
 	nft.operatorApprovals.Set(operatorKey(caller, operator), approved)
-	std.Emit("ApprovalForAll", "owner", caller.String(), "operator", operator.String(), "approved", strconv.FormatBool(approved))
+
+	if approved {
+		std.Emit("ApprovalForAll", "owner", caller.String(), "operator", operator.String(), "approved", "true")
+	} else {
+		std.Emit("ApprovalForAll", "owner", caller.String(), "operator", operator.String(), "approved", "false")
+	} // We do not support strconv.FormatBool yet
 }
 
 func (nft Token) GetApproved(tokenId string) std.Address {
@@ -160,7 +165,7 @@ func mustBeValid(address std.Address) {
 func (nft Token) mustBeOwned(tokenId string) std.Address {
 	owner, exists := nft.balances.Get(tokenId)
 	if !exists {
-		err := ufmt.Sprintf("GRC721: token with id %s does not exist", tokenId)
+		err := ufmt.Sprintf("GRC721: token with ID %s does not exist", tokenId)
 		panic(err)
 	}
 
@@ -187,10 +192,10 @@ func (nft Token) isAuthorized(owner, spender std.Address, tokenId string) bool {
 }
 
 func (nft Token) update(to std.Address, tokenId string, auth std.Address) std.Address {
-	from := nft.OwnerOf(tokenId)
+	from := nft.ownerOf(tokenId)
 
 	if auth != emptyAddress {
-		nft.checkAuthorized(owner, auth, tokenId)
+		nft.checkAuthorized(from, auth, tokenId)
 	}
 
 	// If token exists
@@ -199,8 +204,8 @@ func (nft Token) update(to std.Address, tokenId string, auth std.Address) std.Ad
 		nft.approve(emptyAddress, tokenId, emptyAddress, false)
 
 		// Set new balances
-		ownerNewBalance, _ := nft.balances.Get(owner.String())
-		nft.balances.Set(owner.String(), ownerNewBalance.(int64)-1)
+		ownerNewBalance, _ := nft.balances.Get(from.String())
+		nft.balances.Set(from.String(), ownerNewBalance.(int64)-1)
 	}
 
 	if to != emptyAddress {
@@ -211,9 +216,9 @@ func (nft Token) update(to std.Address, tokenId string, auth std.Address) std.Ad
 	// Set new ownership
 	nft.owners.Set(tokenId, to.String())
 
-	std.Emit("Transfer", "from", owner.String(), "to", to.String(), "tokenID", tokenId)
+	std.Emit("Transfer", "from", from.String(), "to", to.String(), "tokenID", tokenId)
 
-	return owner
+	return from
 }
 
 func (nft Token) approve(to std.Address, tokenId string, auth std.Address, emitEvent bool) {
@@ -229,6 +234,15 @@ func (nft Token) approve(to std.Address, tokenId string, auth std.Address, emitE
 	}
 
 	nft.tokenApprovals.Set(tokenId, to)
+}
+
+func (nft Token) ownerOf(tokenId string) std.Address {
+	owner, exists := nft.owners.Get(tokenId)
+	if !exists {
+		return ""
+	}
+
+	return owner.(std.Address)
 }
 
 // operatorKey is a helper to create the key for the operatorApproval tree
