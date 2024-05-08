@@ -17,6 +17,8 @@ type Token struct {
 	tokenURIs         *avl.Tree // tokenID > URI
 }
 
+var _ IGRC721 = (*Token)(nil)
+
 func NewGRC721Token(name, symbol string) *Token {
 	return &Token{
 		name:     name,
@@ -51,11 +53,12 @@ func (nft Token) OwnerOf(tokenId string) std.Address {
 
 func (nft Token) TransferFrom(from, to std.Address, tokenId string) {
 	caller := std.PrevRealm().Addr()
-	previousOwner := nft.mustBeOwned(tokenId)
-
 	mustBeValid(to)
-	// check authorization
-	nft.checkAuthorized(previousOwner, caller, tokenId)
+
+	prevOwner := nft.update(to, tokenId, caller)
+	if prevOwner != from {
+		panic("GRC721: incorrect owner")
+	}
 
 	std.Emit("Transfer", "from", from.String(), "operator", to.String(), "tokenID", tokenId)
 }
@@ -86,13 +89,11 @@ func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
 	std.Emit("ApprovalForAll", "owner", caller.String(), "operator", operator.String(), "approved", strconv.FormatBool(approved))
 }
 
-// View func - just return empty or error, do not panic?
 func (nft Token) GetApproved(tokenId string) std.Address {
 	_ = nft.mustBeOwned(tokenId)
 	return nft.getApproved(tokenId)
 }
 
-// View func - just return empty or error, do not panic?
 func (nft Token) IsApprovedForAll(owner, operator std.Address) bool {
 	approved, exists := nft.operatorApprovals.Get(operatorKey(owner, operator))
 	if !exists || approved == false {
@@ -102,8 +103,23 @@ func (nft Token) IsApprovedForAll(owner, operator std.Address) bool {
 	return true
 }
 
-// Helpers
+func (nft Token) TokenURI(tokenId string) string {
+	nft.mustBeOwned(tokenId)
+	uri, exists := nft.tokenURIs.Get(tokenId)
+	if !exists {
+		return ""
+	}
 
+	return uri.(string)
+}
+
+func (nft Token) SetTokenURI(tokenId string, tokenURI string) string {
+	nft.requireOwner(std.PrevRealm().Addr(), tokenId)
+	nft.tokenURIs.Set(tokenId, tokenURI)
+	return tokenURI
+}
+
+// Helpers
 func (nft Token) requireOwner(caller std.Address, tokenId string) {
 	if caller != nft.mustBeOwned(tokenId) {
 		panic("GRC721: not owner")
@@ -151,7 +167,7 @@ func (nft Token) checkAuthorized(owner, spender std.Address, tokenId string) {
 }
 
 // isAuthorized returns if the spender is authorized to transfer the specified token
-// Assumes addresses are valid and token exists
+// Assumes addresses are valid and the token exists
 func (nft Token) isAuthorized(owner, spender std.Address, tokenId string) bool {
 	return owner == spender ||
 		nft.IsApprovedForAll(owner, spender) ||

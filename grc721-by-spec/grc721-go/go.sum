@@ -31,6 +31,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/gnolang/gno v0.0.0-20240402115239-831bb6f92e1a h1:WyozSr+GOTQUnQ1BX8CSsx/JZe1c3X3+rEsSW/MXJDY=
 github.com/gnolang/gno v0.0.0-20240402115239-831bb6f92e1a/go.mod h1:we1MozTqYAQFayi2eIvNtdqtGtFB7DQYSVguWBurWRI=
+github.com/gnolang/gno v0.0.0-20240507185310-5a96926dc6af h1:dddvtkbVRlpT1Egb+zVG/eLfB8sCmEwkPwlNKZqKM+g=
+github.com/gnolang/gno v0.0.0-20240507185310-5a96926dc6af/go.mod h1:vbm5sS6KZj2rkwJ9C6AtdpPZB7aZDhfZ3lJUC+qa/to=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.4.0-rc.1/go.mod h1:ceaxUfeHdC40wWswd/P6IGgMaK3YpKi5j83Wpe3EHw8=
 github.com/golang/protobuf v1.4.0-rc.1.0.20200221234624-67d41d38c208/go.mod h1:xKAWHe0F5eneWXFV3EuXVDTCmh+JuBKY0li0aMyXATA=

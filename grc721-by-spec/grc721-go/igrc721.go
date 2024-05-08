@@ -10,28 +10,28 @@ type IGRC721 interface {
 
 	// OwnerOf returns the owner of the `tokenId` token
 	// tokenId must exist
-	OwnerOf(tokenId uint64) std.Address
+	OwnerOf(tokenId string) std.Address
 
 	// TransferFrom transfers `tokenId` token from `from` to `to`
-	TransferFrom(from, to std.Address, tokenId uint64)
+	TransferFrom(from, to std.Address, tokenId string)
 
 	// Approve gives permission to `to` to transfer `tokenId` token to another account
 	// The approval is cleared when the token is transferred
-	Approve(to std.Address, tokenId uint64)
+	Approve(to std.Address, tokenId string)
 
 	// SetApprovalForAll approves or removes `operator` as an operator for the caller
 	// Operators can call TransferFrom for any token owned by the caller
 	SetApprovalForAll(operator std.Address, approved bool)
 
 	// GetApproved returns the account approved for `tokenId` token
-	GetApproved(tokenId uint64) std.Address
+	GetApproved(tokenId string) std.Address
 
 	// IsApprovedForAll returns if the `operator` is allowed to manage all the assets of `owner`
-	IsApprovedForAll(owner, operator std.Address)
+	IsApprovedForAll(owner, operator std.Address) bool
 
 	// TokenURI gets the tokenURI for matching `tokenId`
-	TokenURI(tokenId uint64) string
+	TokenURI(tokenId string) string
 
 	// SetTokenURI sets `tokenURI` as the tokenURI of `tokenId`
-	SetTokenURI(tokenId uint64, tokenURI string) string
+	SetTokenURI(tokenId string, tokenURI string) string
 }
