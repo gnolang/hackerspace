@@ -1,4 +1,4 @@
-module gno.land/r/leon/nft
+module gno.land/r/example/nft
 
 require (
 	gno.land/p/demo/ownable v0.0.0-latest
