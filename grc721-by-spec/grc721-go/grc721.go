@@ -4,6 +4,7 @@ import (
 	"github.com/gnolang/gno/examples/gno.land/p/demo/avl"
 	"github.com/gnolang/gno/examples/gno.land/p/demo/ufmt"
 	"github.com/gnolang/gno/gnovm/stdlibs/std"
+	"strconv"
 )
 
 type Token struct {
@@ -49,12 +50,14 @@ func (nft Token) OwnerOf(tokenId string) std.Address {
 }
 
 func (nft Token) TransferFrom(from, to std.Address, tokenId string) {
-	//caller := std.PrevRealm().Addr()
+	caller := std.PrevRealm().Addr()
+	previousOwner := nft.mustBeOwned(tokenId)
 
 	mustBeValid(to)
-	// caller must be:
-	// owner, approved, or operator
+	// check authorization
+	nft.checkAuthorized(previousOwner, caller, tokenId)
 
+	std.Emit("Transfer", "from", from.String(), "operator", to.String(), "tokenID", tokenId)
 }
 
 func (nft Token) Approve(to std.Address, tokenId string) {
@@ -68,6 +71,7 @@ func (nft Token) Approve(to std.Address, tokenId string) {
 	nft.requireOwner(caller, tokenId)
 
 	nft.tokenApprovals.Set(tokenId, to)
+	std.Emit("Approval", "owner", caller.String(), "approved", to.String(), "tokenID", tokenId)
 }
 
 func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
@@ -79,6 +83,7 @@ func (nft Token) SetApprovalForAll(operator std.Address, approved bool) {
 	}
 
 	nft.operatorApprovals.Set(operatorKey(caller, operator), approved)
+	std.Emit("ApprovalForAll", "owner", caller.String(), "operator", operator.String(), "approved", strconv.FormatBool(approved))
 }
 
 // View func - just return empty or error, do not panic?
@@ -153,18 +158,28 @@ func (nft Token) isAuthorized(owner, spender std.Address, tokenId string) bool {
 		nft.getApproved(tokenId) == owner
 }
 
-///**
-// * @dev Returns whether `spender` is allowed to manage `owner`'s tokens, or `tokenId` in
-// * particular (ignoring whether it is owned by `owner`).
-// *
-// * WARNING: This function assumes that `owner` is the actual owner of `tokenId` and does not verify this
-// * assumption.
-// */
-//function _isAuthorized(address owner, address spender, uint256 tokenId) internal view virtual returns (bool) {
-//return
-//spender != address(0) &&
-//(owner == spender || isApprovedForAll(owner, spender) || _getApproved(tokenId) == spender);
-//}
+func (nft Token) update(to std.Address, tokenId string, auth std.Address) std.Address {
+	owner := nft.mustBeOwned(tokenId)
+
+	if auth != "" {
+		nft.checkAuthorized(owner, auth, tokenId)
+	}
+
+	// Clear approval for this token
+	nft.tokenApprovals.Set(tokenId, "")
+
+	// Set new balances
+	newOwnerBalance, _ := nft.balances.Get(owner.String())
+	nft.balances.Set(owner.String(), newOwnerBalance.(int64)-1)
+
+	toBalance, _ := nft.balances.Get(to.String())
+	nft.balances.Set(to.String(), toBalance.(int64)+1)
+
+	// Set new ownership
+	nft.owners.Set(tokenId, to.String())
+
+	return owner
+}
 
 // operatorKey is a helper to create the key for the operatorApproval tree
 func operatorKey(owner, operator std.Address) string {
