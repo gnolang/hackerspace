@@ -124,13 +124,15 @@ func (nft Token) mint(to std.Address, tokenId string) {
 	mustBeValid(to)
 	prevOwner := nft.update(to, tokenId, emptyAddress)
 	if prevOwner != emptyAddress {
-		panic("GRC721: Invalid sender")
+		str := ufmt.Sprintf("GRC721: token with id %s has already been minted", tokenId)
+		panic(str)
 	}
 }
 
 func (nft Token) burn(tokenId string) {
 	prevOwner := nft.update(emptyAddress, tokenId, emptyAddress)
-	if prevOwner != emptyAddress {
+
+	if prevOwner == emptyAddress {
 		str := ufmt.Sprintf("GRC721: Token with ID %s does not exist", tokenId)
 		panic(str)
 	}
@@ -215,17 +217,18 @@ func (nft Token) update(to std.Address, tokenId string, auth std.Address) std.Ad
 		} else {
 			nft.balances.Set(to.String(), toBalance.(uint64)+1)
 		}
-	}
-
-	// Set new ownership
-	nft.owners.Set(tokenId, to)
-
-	if _, exists := nft.owners.Get(tokenId); !exists {
-		panic("wtf")
+		// Set new ownership
+		nft.owners.Set(tokenId, to)
+	} else {
+		// Burn
+		_, removed := nft.owners.Remove(tokenId)
+		if !removed {
+			str := ufmt.Sprintf("GRC721: Cannot burn token with id %s", tokenId)
+			panic(str)
+		}
 	}
 
 	std.Emit("Transfer", "from", from.String(), "to", to.String(), "tokenID", tokenId)
-
 	return from
 }
 
