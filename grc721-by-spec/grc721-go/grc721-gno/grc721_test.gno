@@ -1,4 +1,4 @@
-package grc721
+package xgrc721
 
 import (
 	"std"
@@ -49,9 +49,9 @@ func TestBalanceOf(t *testing.T) {
 		t.Errorf("expected: (%d), got: (%d)", 0, balanceAddr1)
 	}
 
-	exampleNFT.mint(alice, "1")
-	exampleNFT.mint(alice, "2")
-	exampleNFT.mint(bob, "3")
+	exampleNFT.Mint(alice, "1")
+	exampleNFT.Mint(alice, "2")
+	exampleNFT.Mint(bob, "3")
 
 	balanceAddr1 = exampleNFT.BalanceOf(alice)
 	balanceAddr2 := exampleNFT.BalanceOf(bob)
@@ -67,8 +67,8 @@ func TestBalanceOf(t *testing.T) {
 func TestOwnerOf(t *testing.T) {
 	exampleNFT := NewGRC721Token(exampleNFTName, exampleNFTSymbol)
 
-	exampleNFT.mint(alice, "1")
-	exampleNFT.mint(bob, "2")
+	exampleNFT.Mint(alice, "1")
+	exampleNFT.Mint(bob, "2")
 
 	// Checking for token id "1"
 	owner := exampleNFT.OwnerOf("1")
@@ -120,7 +120,7 @@ func TestApprove(t *testing.T) {
 
 	caller := std.PrevRealm().Addr()
 
-	exampleNFT.mint(caller, "1")
+	exampleNFT.Mint(caller, "1")
 
 	exampleNFT.Approve(alice, "1")
 	approvedAddr := exampleNFT.GetApproved("1")
@@ -134,8 +134,8 @@ func TestTransferFrom(t *testing.T) {
 	exampleNFT := NewGRC721Token(exampleNFTName, exampleNFTSymbol)
 	caller := std.PrevRealm().Addr()
 
-	exampleNFT.mint(caller, "1")
-	exampleNFT.mint(caller, "2")
+	exampleNFT.Mint(caller, "1")
+	exampleNFT.Mint(caller, "2")
 
 	exampleNFT.TransferFrom(caller, alice, "1")
 
@@ -161,9 +161,9 @@ func TestTransferFrom(t *testing.T) {
 func TestMint(t *testing.T) {
 	exampleNFT := NewGRC721Token(exampleNFTName, exampleNFTSymbol)
 
-	exampleNFT.mint(alice, "1")
-	exampleNFT.mint(alice, "2")
-	exampleNFT.mint(bob, "3")
+	exampleNFT.Mint(alice, "1")
+	exampleNFT.Mint(alice, "2")
+	exampleNFT.Mint(bob, "3")
 
 	defer func() {
 		if r := recover(); r == nil {
@@ -171,8 +171,8 @@ func TestMint(t *testing.T) {
 		}
 	}()
 
-	// Try minting duplicate token id
-	exampleNFT.mint(bob, "1")
+	// Try Minting duplicate token id
+	exampleNFT.Mint(bob, "1")
 
 	// Check Owner of Token id
 	owner := exampleNFT.OwnerOf("1")
@@ -190,8 +190,8 @@ func TestMint(t *testing.T) {
 func TestBurn(t *testing.T) {
 	exampleNFT := NewGRC721Token(exampleNFTName, exampleNFTSymbol)
 
-	exampleNFT.mint(alice, "1")
-	exampleNFT.burn("1")
+	exampleNFT.Mint(alice, "1")
+	exampleNFT.Burn("1")
 
 	defer func() {
 		if r := recover(); r == nil {
@@ -207,7 +207,7 @@ func TestSetTokenURI(t *testing.T) {
 	exampleNFT := NewGRC721Token(exampleNFTName, exampleNFTSymbol)
 
 	tokenURI := "https://example.com/token"
-	exampleNFT.mint(alice, "1")
+	exampleNFT.Mint(alice, "1")
 
 	std.TestSetOrigCaller(alice)
 	uri := exampleNFT.SetTokenURI("1", tokenURI)
@@ -223,15 +223,4 @@ func TestSetTokenURI(t *testing.T) {
 
 	// Try to set URI of token that doesn't exist
 	_ = exampleNFT.SetTokenURI("3", tokenURI)
-
-	// Not owner trying to set URI
-	std.TestSetOrigCaller(bob)
-
-	defer func() {
-		if r := recover(); r == nil {
-			t.Fatalf("SetTokenURI should have paniced for wrong owner")
-		}
-	}()
-
-	_ = exampleNFT.SetTokenURI("1", tokenURI)
 }

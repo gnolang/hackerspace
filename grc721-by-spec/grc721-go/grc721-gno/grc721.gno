@@ -1,4 +1,4 @@
-package grc721
+package xgrc721
 
 import (
 	"gno.land/p/demo/avl"
@@ -115,12 +115,11 @@ func (nft Token) TokenURI(tokenId string) string {
 }
 
 func (nft Token) SetTokenURI(tokenId string, tokenURI string) string {
-	nft.requireOwner(std.PrevRealm().Addr(), tokenId)
 	nft.tokenURIs.Set(tokenId, tokenURI)
 	return tokenURI
 }
 
-func (nft Token) mint(to std.Address, tokenId string) {
+func (nft Token) Mint(to std.Address, tokenId string) {
 	mustBeValid(to)
 	prevOwner := nft.update(to, tokenId, emptyAddress)
 	if prevOwner != emptyAddress {
@@ -129,7 +128,7 @@ func (nft Token) mint(to std.Address, tokenId string) {
 	}
 }
 
-func (nft Token) burn(tokenId string) {
+func (nft Token) Burn(tokenId string) {
 	prevOwner := nft.update(emptyAddress, tokenId, emptyAddress)
 
 	if prevOwner == emptyAddress {
