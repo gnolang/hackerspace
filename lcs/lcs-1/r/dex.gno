@@ -10,31 +10,30 @@ import (
 	"gno.land/r/demo/wugnot"
 )
 
-// Improvements
-// any <> any
-// implement fees
-// improve rendering & error messages
-// add tests :)
+// Possible improvements to this code
+// Handle multiple liquidity pools to handle any grc20 swap
+// Implement fees for liquidity providers
+// Improve rendering & error messages
+// Add tests
 
-type LastTrader struct {
+type LastTrade struct {
 	addr      std.Address
 	amtWugnot uint64
 	amtFoo20  uint64
 	typ       string // "wff" || "ffw"
 }
 
-// liquidity pool
 var (
 	wugnotReserve uint64
 	foo20Reserve  uint64
 	dexAddr       = std.CurrentRealm().Addr() // Realm{pkgPath, address} // std.Address
-	lt            *LastTrader
+	lt            *LastTrade
 )
 
 // constant product amm -> k = x * y
 
-// amm -> LP (reserves of tokens) > who provides resevers
-// Please, use Approve first
+// amm -> LP (reserves of tokens) > who provides reseves
+// Please, use grc20.Approve before calling this function
 func AddLiquidity(fooAmt, wugnotAmt uint64) string {
 	// add both wugnot & foo20 reserves
 	// provide equal amounts
@@ -85,7 +84,7 @@ func SwapWugnotForFoo20(amtInWugnot, amtOutFoo20 uint64) string {
 	wugnotReserve = newWugnotReserve
 	foo20Reserve = newFoo20Reserve
 
-	lt = &LastTrader{
+	lt = &LastTrade{
 		addr:      caller,
 		amtWugnot: amtInWugnot,
 		amtFoo20:  amtOutFoo20,
@@ -120,7 +119,7 @@ func SwapFoo20ForWugnot(amtInFoo20, amountOutWugnot uint64) string {
 	wugnotReserve = newWugnotReserve
 	foo20Reserve = newFoo20Reserve
 
-	lt = &LastTrader{
+	lt = &LastTrade{
 		addr:      caller,
 		amtWugnot: amountOutWugnot,
 		amtFoo20:  amtInFoo20,
