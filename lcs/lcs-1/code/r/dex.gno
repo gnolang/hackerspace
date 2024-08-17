@@ -88,7 +88,7 @@ func SwapWugnotForFoo20(amtInWugnot, amtOutFoo20 uint64) string {
 		addr:      caller,
 		amtWugnot: amtInWugnot,
 		amtFoo20:  amtOutFoo20,
-		typ:       "wff",
+		typ:       "wff", // wugnot for foo20
 	}
 
 	return ufmt.Sprintf("successfully swapped %d wugnot for %d foo20", amtInWugnot, amtOutFoo20)
@@ -123,7 +123,7 @@ func SwapFoo20ForWugnot(amtInFoo20, amountOutWugnot uint64) string {
 		addr:      caller,
 		amtWugnot: amountOutWugnot,
 		amtFoo20:  amtInFoo20,
-		typ:       "ffw",
+		typ:       "ffw", // foo20 for wugnot
 	}
 
 	return ufmt.Sprintf("successfully swapped %d foo20 for %d wugnot", amtInFoo20, amountOutWugnot)
