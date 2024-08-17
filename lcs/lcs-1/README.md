@@ -1,5 +1,6 @@
-# Gno Live Coding Session 1
+# Gno Live Coding Session #1
 
-The first Gno Live Coding session, which happened on Friday, Aug 16th 2024.
+#### Date: Friday, Aug 16th 2024
+#### Topic: Minimal Constant Product GRC20 AMM in Gno
 
-Topic: Simple Constant Product AMM in Gno.
+
