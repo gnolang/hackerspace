@@ -5,7 +5,7 @@
 #### Presenter: [@leohhhn](https://github.com/leohhhn)
 
 This live coding session was the first Gno Live coding session.
-It included building a basic GRC20 DEX in Gno with the constant product AMM
+It included building a basic [`GRC20`](https://gno.land/p/demo/grc/grc20) DEX in Gno with the constant product AMM
 algorithm. The base implementation only handles two GRC20 tokens:
 [`wugnot`](https://gno.land/r/demo/wugnot) & [`foo20`](https://gno.land/r/demo/foo20).
 

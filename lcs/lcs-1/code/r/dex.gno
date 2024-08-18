@@ -11,8 +11,8 @@ import (
 )
 
 // Possible improvements to this code
-// Handle multiple liquidity pools to handle any grc20 swap
-// Implement fees for liquidity providers
+// Handle multiple liquidity pools to allow for any grc20 swap
+// Implement rewards for liquidity providers
 // Improve rendering & error messages
 // Add tests
 
