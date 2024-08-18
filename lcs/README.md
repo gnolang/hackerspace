@@ -10,7 +10,8 @@ Each subfolder of this directory is meant to contain a few things:
 - Code created during the session
 - A `followup-work` folder, which anyone can use to add their added work or code 
 improvements to the code built during the session.
+- Other useful information
 
 Currently, the sessions are hosted on the [official gno.land Discord server](https://discord.gg/S8nKUqwkPn).
-Check out the active events for the upcoming GnoLCSs.
+Check out the active events on the server for the upcoming Gno Live Coding session.
 
