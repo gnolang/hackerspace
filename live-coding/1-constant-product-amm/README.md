@@ -15,3 +15,5 @@ algorithm. The base implementation only handles two GRC20 tokens:
 We encourage anyone who wishes to build upon the example given in the coding
 session to do so. Please make a PR adding your code to the 
 [`followup-work/`](./followup-work) folder, and ping the presenter.
+
+> Due to technical issues, the video for this session is missing. :/
