@@ -1,4 +1,5 @@
 # Followup work
 
-Please add your followup work under a folder named after your username.
+To add your code for this GnoLCS, create a directory named after your GitHub username
+under this folder.
 
