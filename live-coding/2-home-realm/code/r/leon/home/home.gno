@@ -1,3 +1,5 @@
+// Package home is Leon's personal home realm, deployed under gno.land/r/leon/home
+// It is meant to act as Leon's profile page on gno.land
 package home
 
 import (
@@ -39,7 +41,7 @@ func UpdateAbtMe(col1, col2 string) {
 	abtMe[1] = col2
 }
 
-// todo: make setters for everything else
+// Todo: make setters for all pkg-level variables
 
 // Rendering
 

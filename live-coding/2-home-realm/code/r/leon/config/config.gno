@@ -1,3 +1,7 @@
+// Package config is simply Leon's configuration file.
+// It can be used externally to dynamically give Leon the rights to call something;
+// Say, an admin variable can be set to r/leon/config.Address(). Then, Leon can
+// update his address and still retain admin priveleges.
 package config
 
 import (
@@ -58,5 +62,5 @@ func AssertAuthorized() {
 	}
 }
 
-// possible improvements
-// add errors, add a non-panicking function
+// Possible improvements
+// Add errors, add a non-panicking function for Authorized
