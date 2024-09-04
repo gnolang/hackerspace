@@ -5,19 +5,28 @@ import (
 )
 
 type Project struct {
-	Name string
-	URL  string
+	Name 				string
+	URL  				string
 }
 
 type Social struct {
-	Name string
-	URL  string
+	Name 				string
+	URL  				string
 }
 
 var (
-	aboutMe  string
-	projects map[int]Project
-	socials  map[int]Social
+	aboutMe   			string
+	projects  			map[int]Project
+	socials   			map[int]Social
+
+
+	fontFamily 			= "Inter, sans-serif"
+	primaryColor 		= "#FEFEFE"
+	borderColor 		= "#D30000"
+	fontSizeLarge 		= "7rem"
+	fontSizeMedium 		= "4rem"
+	fontSizeSmall 		= "1.5rem"
+	fontSizeExtraSmall 	= "1rem"
 )
 
 func init() {
@@ -68,53 +77,47 @@ func RemoveSocial(index int) {
 }
 
 func Render(path string) string {
-	out := "<div style='display: flex;'>\n\n"
-
-	out += "<div style='flex: 8; margin-right: 20px; padding: 2rem; border: 2px solid transparent; border-image: linear-gradient(166deg, rgba(211,0,0,1) 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'>"
-	out += renderAboutMe()
-	out += "</div>"
-
-	out += "<div style='flex: 2; padding: 2rem; border: 2px solid transparent; border-image: linear-gradient(324deg, rgba(211,0,0,1) 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'>"
-	out += renderProjects()
-	out += "</div>\n\n"
-
-	out += "</div>\n\n"
-	return out
+	return "<div style='display: flex;'>\n" +
+		"  <div style='flex: 8; margin-right: 20px; padding: 2rem; border: 2px solid transparent; border-image: linear-gradient(166deg, " + borderColor + " 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'>\n" +
+		"    " + renderAboutMe() + "\n" +
+		"  </div>\n" +
+		"  <div style='flex: 2; padding: 2rem; border: 2px solid transparent; border-image: linear-gradient(324deg, " + borderColor + " 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'>\n" +
+		"    " + renderProjects() + "\n" +
+		"  </div>\n" +
+		"</div>\n"
 }
 
 func renderAboutMe() string {
-	out := "<div class='rows-3'>"
-	out += "<h1 style='font-family: Inter, sans-serif; font-weight: 100; color: #FEFEFE; text-align: left; font-size: 7rem;'>Nemanya.</h1>"
-	out += "<div style='border-left: 1px solid #D30000; padding-left: 1rem;'>"
-	out += "<p style='font-family: Inter, sans-serif; color: #FEFEFE; font-size: 1.5rem; margin-bottom: 5rem;'>"
-	out += aboutMe
-	out += "</p>\n\n"
-	out += "</div>\n\n"
-
-	out += renderSocials()
-	out += "</div><!-- /rows-3 -->\n\n"
-	return out
+	return "<div class='rows-3'>\n" +
+		"  <h1 style='font-family: " + fontFamily + "; font-weight: 100; color: " + primaryColor + "; text-align: left; font-size: " + fontSizeLarge + ";'>Nemanya.</h1>\n" +
+		"  <div style='border-left: 1px solid " + borderColor + "; padding-left: 1rem;'>\n" +
+		"    <p style='font-family: " + fontFamily + "; color: " + primaryColor + "; font-size: " + fontSizeSmall + "; margin-bottom: 5rem;'>\n" +
+		"      " + aboutMe + "\n" +
+		"    </p>\n" +
+		"  </div>\n" +
+		"  " + renderSocials() + "\n" +
+	"</div><!-- /rows-3 -->\n"
 }
 
 func renderSocials() string {
-	out := "<div class='socials-container' style='display: flex; justify-content: center; align-items: center; gap: 20px;'>\n\n"
+	socialsHTML := "<div class='socials-container' style='display: flex; justify-content: center; align-items: center; gap: 20px;'>\n"
 	for _, social := range socials {
-		out += "<div style='display: flex; justify-content: center; align-items: center;'>"
-		out += "<a href='" + social.URL + "' style='color: #FEFEFE; font-family: Inter, sans-serif; font-size: 1rem; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;'>" + social.Name + "</a>"
-		out += "</div>\n"
+		socialsHTML += "  <div style='display: flex; justify-content: center; align-items: center;'>\n" +
+			"    <a href='" + social.URL + "' style='color: " + primaryColor + "; font-family: " + fontFamily + "; font-size: " + fontSizeExtraSmall + "; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;'>" + social.Name + "</a>\n" +
+			"  </div>\n"
 	}
-	out += "</div>\n\n"
-	return out
+	socialsHTML += "</div>\n"
+	return socialsHTML
 }
 
 func renderProjects() string {
-	out := "<div class='rows-5'>"
-	out += "<h2 style='font-family: Inter, sans-serif; font-weight: 200; color: #FEFEFE; text-align: left; font-size: 4rem;'>Projects</h2>"
+	projectsHTML := "<div class='rows-5'>\n" +
+		"  <h2 style='font-family: " + fontFamily + "; font-weight: 200; color: " + primaryColor + "; text-align: left; font-size: " + fontSizeMedium + ";'>Projects</h2>\n"
 	for _, project := range projects {
-		out += "<div style='margin-bottom: 1rem; border-left: 1px solid #D30000; padding-left: 1rem;'>"
-		out += "<a href='" + project.URL + "' style='color: #FEFEFE; font-family: Inter, sans-serif; font-size: 1.5rem;'>" + project.Name + "</a>"		
-		out += "</div>\n"
+		projectsHTML += "  <div style='margin-bottom: 1rem; border-left: 1px solid " + borderColor + "; padding-left: 1rem;'>\n" +
+			"    <a href='" + project.URL + "' style='color: " + primaryColor + "; font-family: " + fontFamily + "; font-size: " + fontSizeSmall + ";'>" + project.Name + "</a>\n" +
+			"  </div>\n"
 	}
-	out += "</div><!-- /rows-5 -->\n\n"
-	return out
+	projectsHTML += "</div><!-- /rows-5 -->\n"
+	return projectsHTML
 }
