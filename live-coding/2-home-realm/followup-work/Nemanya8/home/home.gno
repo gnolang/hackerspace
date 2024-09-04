@@ -43,15 +43,14 @@ func UpdateProjects(project1, project2, project3, project4 string)  {
 func Render(path string) string {
     out := "<div style='display: flex;'>\n\n"
 
-    out += "<div style='flex: 8; margin-right: 20px; position: relative; padding: 2rem;'>"
+    out += "<div style='flex: 8; margin-right: 20px; padding: 2rem; border: 2px solid transparent; border-image: linear-gradient(166deg, rgba(211,0,0,1) 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'>"
     out += renderAboutMe()
-    out += "<div style='position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid transparent; border-image: linear-gradient(166deg, rgba(211,0,0,1) 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'></div>"
     out += "</div>"
     
-    out += "<div style='flex: 2; position: relative; padding: 2rem;'>"
+    out += "<div style='flex: 2; padding: 2rem; border: 2px solid transparent; border-image: linear-gradient(324deg, rgba(211,0,0,1) 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'>"
 	out += renderProjects()
-	out += "<div style='position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid transparent; border-image: linear-gradient(324deg, rgba(211,0,0,1) 0%, rgba(0,0,0,0) 20%); border-image-slice: 1;'></div>"
     out += "</div>\n\n"
+	
     out += "</div>\n\n"
     return out
 }
