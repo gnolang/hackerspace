@@ -1,0 +1,24 @@
+name: "gnoland-snapshot-node"
+
+services:
+  gnoland:
+    image: "ghcr.io/gnolang/gno/gnoland:0.2.0"
+    entrypoint: ["/scripts/entrypoint.gnoland.sh"]
+    ports:
+      - 127.0.0.1:26657:26657
+    volumes:
+      - ./scripts:/scripts
+      - ./gnoland-data:/gnoroot/gnoland-data
+
+  snapshotter:
+    image: "docker:27.2.0-cli-alpine3.20"
+    entrypoint: ["sh", "/scripts/entrypoint.snapshotter.sh"]
+    env_file: "env"
+    environment:
+      CHAIN_ID: "test4"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./scripts:/scripts"
+      - "./docker-compose.yml:/docker-compose.yml"
+      - "./env:/env"
+      - "./gnoland-data:/gnoroot/gnoland-data:ro"
