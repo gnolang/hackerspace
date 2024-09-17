@@ -23,4 +23,4 @@ session to do so. Please make a PR adding your code to the
 
 ## Video
 
-Video recording will be uploaded soon.
+Video recording can be found [here](https://www.youtube.com/watch?v=ZI0ZGDMbj-U).
