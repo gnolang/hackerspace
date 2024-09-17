@@ -5,4 +5,5 @@
 // Currently, the only way to interact with it is via MsgRun (https://docs.gno.land/gno-tooling/cli/gnokey/state-changing-calls#the-power-of-run)
 // The `example_interactions` folder contains Gno scripts that can be provided to the Run transactions to execute these methods.
 // This functionality is planned for MsgCall as well in the future.
+// For more token examples, check out wugnot, foo20, and bar20 in the examples/ folder in the Gno monorepo.
 package run20
