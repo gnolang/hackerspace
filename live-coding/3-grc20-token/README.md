@@ -1,6 +1,6 @@
 # Gno Live Coding Session #3
 
-#### Topic: Creating your own GRC20 token while Gno language features 
+#### Topic: Creating your own GRC20 token while exploring Gno language features 
 #### Date: Friday, Sept 13th 2024
 #### Presenter: [@leohhhn](https://github.com/leohhhn)
 
