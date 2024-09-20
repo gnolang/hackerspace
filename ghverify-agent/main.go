@@ -77,15 +77,15 @@ func main() {
 		Args:    []string{arg},
 	}
 
-	res, err := client.Call(baseCfg)
-	println(res)
+	_, err = client.Call(baseCfg, msg)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func checkGitHubRepo(owner, repo string) bool {
-	// Construct the GitHub API URL
 	url := fmt.Sprintf("https://api.github.com/repos/%s/%s", owner, repo)
 
-	// Send a GET request to the GitHub API
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -97,8 +97,7 @@ func checkGitHubRepo(owner, repo string) bool {
 			panic(err)
 		}
 	}(resp.Body)
-
-	// Check if the status code is 200 (OK) or 404 (Not Found)
+	1
 	if resp.StatusCode == http.StatusOK {
 		return true
 	}
