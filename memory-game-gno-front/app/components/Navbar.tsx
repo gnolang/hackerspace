@@ -11,9 +11,11 @@ const Navbar = () => {
     };
 
     return (
-        <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
+        <nav className="flex justify-between items-center p-4 bg-slate-950 text-white">
             {/* Game Title */}
+            <Link href={"/"}>
             <div className="text-lg font-bold mr-6">Image Hunt</div>
+            </Link>
 
             {/* Button Group */}
             <div className="flex items-center space-x-4">

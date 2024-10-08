@@ -4,7 +4,7 @@ import { AdenaService } from '../adena/adena'; // Adjust the path as necessary
 import {EMessageType, IAccountInfo, IAdenaMessage} from "@/app/adena/adena.types";
 import Config from "@/app/config";
 import ProviderContext from "@/app/context/ProviderContext";
-import {parseTopScores} from "@/app/leaderboard/parseTopScores";
+import {parseTopScores} from "@/app/parsers/parseTopScores";
 import {ITopScore} from "@/app/leaderboard/topScore.types";
 import AccountContext from "@/app/context/AccountContext";
 
@@ -16,7 +16,6 @@ interface Score {
 const Leaderboard: React.FC = () => {
     const [topScores, setTopScores] = useState<ITopScore[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const { address } = useContext(AccountContext);
     const { provider } = useContext(ProviderContext);
 
     const fetchTopScores = async () => {
