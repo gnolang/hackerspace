@@ -1,10 +1,11 @@
 // global.d.ts
-
 interface Adena {
-    AddEstablish: (name: string) => Promise<void>;
-    // Add other methods you may need to call from the Adena SDK here
+    SwitchNetwork(chainID: string): import("./services/adena/adena.types").IAdenaResponse | PromiseLike<import("./services/adena/adena.types").IAdenaResponse>;
+    AddEstablish(appName: string): Promise<{ code: number }>;
+    GetAccount(): Promise<{ data: any }>;
+    DoContract(contract: any): Promise<any>;
 }
 
 interface Window {
-    adena: Adena;
+    adena?: Adena; // Optional chaining in case it's undefined
 }

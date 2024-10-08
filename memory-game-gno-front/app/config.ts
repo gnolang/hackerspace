@@ -1,0 +1,15 @@
+// config.ts
+
+const NEXT_PUBLIC_CHAIN_ID = process.env.NEXT_PUBLIC_CHAIN_ID;
+const NEXT_PUBLIC_CHAIN_RPC = process.env.NEXT_PUBLIC_CHAIN_RPC;
+const NEXT_PUBLIC_REALM_PATH = process.env.NEXT_PUBLIC_REALM_PATH;
+
+if (!NEXT_PUBLIC_CHAIN_ID || !NEXT_PUBLIC_CHAIN_RPC || !NEXT_PUBLIC_REALM_PATH) {
+    throw new Error('Missing environment variables');
+}
+
+export default {
+    CHAIN_ID: NEXT_PUBLIC_CHAIN_ID,
+    CHAIN_RPC: NEXT_PUBLIC_CHAIN_RPC,
+    REALM_PATH: NEXT_PUBLIC_REALM_PATH,
+};

@@ -1,0 +1,7 @@
+NEXT_PUBLIC_CHAIN_ID="dev"
+NEXT_PUBLIC_CHAIN_RPC="ws://127.0.0.1:26657/websocket"
+NEXT_PUBLIC_REALM_PATH="gno.land/r/demo/memorygame"
+
+NEXT_PUBLIC_CHAIN_ID="portal-loop"
+NEXT_PUBLIC_CHAIN_RPC="https://rpc.gno.land:443	"
+NEXT_PUBLIC_REALM_PATH="gno.land/r/matijamarjanovic/memorygame"
