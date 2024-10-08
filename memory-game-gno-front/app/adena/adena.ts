@@ -127,7 +127,7 @@ export class AdenaService {
         // Sign and send the transaction
         const response: IAdenaResponse = await adena.DoContract({
             messages: messages,
-            gasFee: 1000000, // 1 gnot
+            gasFee: 1, // 1 gnot
             gasWanted: gasWanted // ugnot
         });
 

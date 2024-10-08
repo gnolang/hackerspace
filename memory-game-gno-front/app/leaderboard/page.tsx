@@ -1,8 +1,12 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { AdenaService } from '../adena/adena'; // Adjust the path as necessary
-import { BroadcastTxCommitResult } from '@gnolang/tm2-js-client';
-import {IAdenaMessage} from "@/app/adena/adena.types";
+import {EMessageType, IAccountInfo, IAdenaMessage} from "@/app/adena/adena.types";
+import Config from "@/app/config";
+import ProviderContext from "@/app/context/ProviderContext";
+import {parseTopScores} from "@/app/leaderboard/parseTopScores";
+import {ITopScore} from "@/app/leaderboard/topScore.types";
+import AccountContext from "@/app/context/AccountContext";
 
 interface Score {
     address: string;
@@ -10,53 +14,37 @@ interface Score {
 }
 
 const Leaderboard: React.FC = () => {
-    const [topScores, setTopScores] = useState<Score[]>([]);
+    const [topScores, setTopScores] = useState<ITopScore[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const { address } = useContext(AccountContext);
+    const { provider } = useContext(ProviderContext);
 
-    useEffect(() => {
-        const fetchTopScores = async () => {
-            try {
-                // Fetch top scores from the contract (mocking the fetch for now)
-                const scores: Score[] = await getTopScores(); // Replace with your actual fetching logic
-                setTopScores(scores);
-            } catch (err) {
-                console.error("Failed to fetch top scores:", err);
-                setError("Error fetching top scores.");
-            }
-        };
-
-        fetchTopScores();
-    }, []);
-
-    const sendTransaction = async () => {
+    const fetchTopScores = async () => {
         try {
-            // Replace with your actual messages and gasWanted
-            const messages : any[] = [];
 
-            const gasWanted = 1000000; // Example gas wanted
+            try {
+                if (provider) {
+                    const response: string = await provider.evaluateExpression(
+                        Config.REALM_PATH,
+                        `GetTop10()`,
+                    );
 
-            const result: BroadcastTxCommitResult = await AdenaService.sendTransaction(messages, gasWanted);
-            console.log("Transaction successful:", result);
+                    const topscores = parseTopScores(response);
+                    setTopScores(topscores);
+                }
+            } catch (error) {
+                console.error('Error fetching scores:', error);
+            }
+
         } catch (error) {
             console.error("Failed to send transaction:", error);
             setError("Error sending transaction.");
         }
     };
 
-    // Mock function to simulate fetching top scores
-    const getTopScores = async (): Promise<Score[]> => {
-        // In a real application, fetch this data from your smart contract
-        return [
-            { address: '0x123...', points: 100 },
-            { address: '0x456...', points: 90 },
-            { address: '0x789...', points: 80 },
-            { address: '0xabc...', points: 70 },
-            { address: '0xdef...', points: 60 },
-        ];
-    };
 
     useEffect(() => {
-        sendTransaction(); // Send transaction when the component mounts
+        fetchTopScores(); // Send transaction when the component mounts
     }, []);
 
     return (
