@@ -26,33 +26,63 @@ export default function Home() {
         setTargetImage(randomImage);
     }, [images]);
 
-    const analyzeImage = async (imgSrc: string): Promise<{ brightness: string, dominantColor: string }> => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous"; // To avoid CORS issues
-        img.src = imgSrc;
-
+    const analyzeImage = (imgSrc: string): Promise<{ brightness: number, dominantColor: string }> => {
         return new Promise((resolve, reject) => {
-            img.onload = async () => {
-                try {
-                    // Get brightness using fast-average-color
-                    const brightness = fac.getColor(img).value.toString();
-                    console.log('Brightness:', brightness);
+            const img = new Image();
+            img.crossOrigin = "Anonymous"; // To avoid CORS issues
+            img.src = imgSrc;
 
-                    // Get dominant color using Vibrant
-                    const palette = await Vibrant.from(imgSrc).getPalette();
-                    const dominantColor = palette.Vibrant?.hex ?? "#000000"; // Fallback to black if no color found
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
 
-                    resolve({ brightness, dominantColor });
-                } catch (error) {
-                    reject(error);
+                if (ctx) {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+
+                    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imgData.data;
+
+                    let r = 0, g = 0, b = 0;
+                    let totalPixels = data.length / 4;
+
+                    let totalBrightness = 0;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        r += data[i];     // Red
+                        g += data[i + 1]; // Green
+                        b += data[i + 2]; // Blue
+
+                        // Calculate brightness of the pixel
+                        const brightness = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+                        totalBrightness += brightness;
+                    }
+
+                    // Calculate average brightness and dominant color
+                    const avgBrightness = totalBrightness / totalPixels;
+                    const dominantColor = `rgb(${Math.floor(r / totalPixels)}, ${Math.floor(g / totalPixels)}, ${Math.floor(b / totalPixels)})`;
+
+                    resolve({ brightness: avgBrightness, dominantColor });
+                } else {
+                    reject(new Error('Canvas not supported'));
                 }
             };
+
             img.onerror = reject;
         });
     };
 
     const compareImages = async (selectedSrc: string) => {
         if (!targetImage) return;
+
+        console.log('Selected image:', selectedSrc);
+        console.log('Target image:', targetImage);
+
+        if (selectedSrc === targetImage) {
+            setFeedback("You found the target image!");
+            return;
+        }
 
         try {
             const targetProps = await analyzeImage(targetImage);
