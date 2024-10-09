@@ -15,7 +15,6 @@ export default function Home() {
     const [score, setScore] = useState<number>(0); // Track player's score
     const [guessCount, setGuessCount] = useState<number>(0); // Track number of guesses
 
-    // Function to reset the game state
     const resetGame = () => {
         setFeedback(null);
         setScore(0);
@@ -24,7 +23,7 @@ export default function Home() {
         if (images.length > 0) {
             const randomIndex = Math.floor(Math.random() * images.length *2);
             console.log('New target image index:', randomIndex);
-            setTargetIndex(randomIndex); // Set a new target index for the new game
+            setTargetIndex(randomIndex);
         }
     };
 
@@ -37,11 +36,10 @@ export default function Home() {
         }
     }, [images]);
 
-    // Compare selected image index with target and provide directional feedback
     const compareImages = (selectedIndex: number) => {
         if (targetIndex === null) return;
 
-        setGuessCount(prevCount => prevCount + 1); // Increment guess count
+        setGuessCount(prevCount => prevCount + 1);
 
         if (selectedIndex === targetIndex) {
             setFeedback("Congratulations! You found the treasure!");
@@ -56,8 +54,7 @@ export default function Home() {
                 directionFeedback += "The treasure is more to the left.\n";
             }
 
-            // Assuming a grid layout for rows, calculate if it's above or below
-            const cols = 5; // Increased the number of columns to 5
+            const cols = 5;
             const selectedRow = Math.floor(selectedIndex / cols);
             const targetRow = Math.floor(targetIndex / cols);
 
@@ -71,13 +68,12 @@ export default function Home() {
         }
     };
 
-    // Fetch images from smart contract (already provided)
     const fetchImages = async () => {
         try {
             if (provider) {
                 const response: string = await provider.evaluateExpression(
                     Config.REALM_PATH,
-                    `GetImages()`, // Adjust this function to fetch your images
+                    `GetImages()`,
                 );
 
                 const images = parseImageResponse(response);
@@ -91,26 +87,26 @@ export default function Home() {
     };
 
     useEffect(() => {
-        fetchImages(); // Fetch images when the component mounts
+        fetchImages();
     }, []);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-slate-800">
             <h1 className="text-3xl font-bold mb-6">Treasure Hunt Game</h1>
             {error && <div className="text-red-500 mb-4">{error}</div>}
-            {feedback && <div className="text-yellow-400 mb-4">{feedback}</div>} {/* Display feedback */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"> {/* Increased grid columns to 5 */}
-                {images.concat(images).map((url, index) => ( // Display each image twice
+            {feedback && <div className="text-yellow-400 mb-4">{feedback}</div>}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                {images.concat(images).map((url, index) => (
                     <div
                         key={index}
                         className="relative group border border-gray-300 rounded-lg overflow-hidden shadow-md max-w-[10rem] cursor-pointer"
-                        onClick={() => compareImages(index)} // Pass index to compare with the target
+                        onClick={() => compareImages(index)}
                     >
                         <img
                             src={url}
                             alt={`Image ${index + 1}`}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            style={{ aspectRatio: "4 / 3" }} // Keeps uniformity
+                            style={{ aspectRatio: "4 / 3" }}
                         />
                     </div>
                 ))}

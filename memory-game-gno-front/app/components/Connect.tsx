@@ -5,7 +5,7 @@ import AccountContext from '../context/AccountContext';
 import { AdenaService } from '../adena/adena';
 import Config from '../config';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+import 'react-toastify/dist/ReactToastify.css';
 
 const Connect = () => {
     const { provider } = useContext(ProviderContext);

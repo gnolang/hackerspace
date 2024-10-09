@@ -27,14 +27,11 @@ const Navbar = () => {
 
     return (
         <nav className="flex justify-between items-center p-4 bg-slate-950 text-white">
-            {/* Game Title */}
             <Link href={"/"}>
                 <div className="text-lg font-bold mr-6">Image Hunt</div>
             </Link>
 
-            {/* Button Group */}
             <div className="flex items-center space-x-4">
-                {/* Dropdown for How to Play */}
                 <div className="relative">
                     <button
                         className="text-white focus:outline-none"
@@ -70,7 +67,6 @@ const Navbar = () => {
                     <button className="text-white focus:outline-none">Leaderboard</button>
                 </Link>
 
-                {/* Wallet Connect Button on the Far Right */}
                 <div className="ml-auto">
                     <Connect />
                 </div>
