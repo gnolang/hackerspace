@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Connect = () => {
     const { provider } = useContext(ProviderContext);
+    const { address } = useContext(AccountContext);
     const { setChainID, setAddress } = useContext(AccountContext);
     const [isLoading, setIsLoading] = useState(false);
     const [buttonText, setButtonText] = useState('Connect Wallet');
@@ -31,8 +32,7 @@ const Connect = () => {
                     Config.REALM_PATH,
                     `GetSingleImage(0)`
                 );
-                console.log('Auction data:', response);
-            }
+                }
 
         } catch (error) {
             console.error(error);
@@ -42,7 +42,7 @@ const Connect = () => {
         }
     };
     useEffect(() => {
-        if(provider){
+        if(address){
             setButtonText('Wallet Connected');
         }
     }, []);
