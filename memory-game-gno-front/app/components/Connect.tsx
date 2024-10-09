@@ -27,13 +27,6 @@ const Connect = () => {
 
             toast.success("Connected to Adena!");
 
-            if (provider) {
-                const response = await provider.evaluateExpression(
-                    Config.REALM_PATH,
-                    `GetSingleImage(0)`
-                );
-                }
-
         } catch (error) {
             console.error(error);
             toast.error("Unable to connect to Adena");

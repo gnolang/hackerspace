@@ -5,12 +5,13 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { GnoWSProvider } from "@gnolang/gno-js-client";
 import Config from './config';
 import AccountContext from './context/AccountContext';
 import ProviderContext from './context/ProviderContext';
 import Navbar from "@/app/components/Navbar";
+import {JSONRPCProvider} from "@gnolang/tm2-js-client";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -23,13 +24,11 @@ const geistMono = localFont({
     weight: "100 900",
 });
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+export default function RootLayout({children,}: Readonly<{
     children: React.ReactNode;
 }>) {
-    const [provider, setProvider] = useState<GnoWSProvider | null>(
-        new GnoWSProvider(Config.CHAIN_RPC)
+    const [provider, setProvider] = useState<JSONRPCProvider | null>(
+        new JSONRPCProvider(Config.CHAIN_RPC)
     );
 
     // Manage the state of user account (address and chainID)

@@ -5,3 +5,10 @@ NEXT_PUBLIC_REALM_PATH="gno.land/r/demo/memorygame"
 NEXT_PUBLIC_CHAIN_ID="portal-loop"
 NEXT_PUBLIC_CHAIN_RPC="https://rpc.gno.land:443	"
 NEXT_PUBLIC_REALM_PATH="gno.land/r/matijamarjanovic/memorygame"
+
+{
+    func: GetImages,
+    gasFee: 1,
+    gasWanted: 100000,
+    pkgpath: "gno.land/r/matijamarjanovic/imghunt",
+}

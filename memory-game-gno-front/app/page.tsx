@@ -1,11 +1,12 @@
 'use client'
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import AccountContext from "@/app/context/AccountContext";
 import ProviderContext from "@/app/context/ProviderContext";
 import Config from "@/app/config";
-import { parseImageResponse } from "@/app/parsers/parseImageResponse";
-import { AdenaService } from '@/app/adena/adena';
-import { EMessageType } from "@/app/adena/adena.types";
+import {AdenaService} from '@/app/adena/adena';
+import {EMessageType} from "@/app/adena/adena.types";
+import {stringToBase64, TransactionEndpoint} from "@gnolang/tm2-js-client";
+import {parseImageResponse} from "@/app/parsers/parseImageResponse";
 
 export default function Home() {
     const { address } = useContext(AccountContext);
@@ -81,12 +82,22 @@ export default function Home() {
     const fetchImages = async () => {
         try {
             if (provider) {
-                const response: string = await provider.evaluateExpression(
-                    Config.REALM_PATH,
-                    `GetImages()`,
-                );
 
-                const images = parseImageResponse(response);
+                const transaction = [
+                    {
+                        type: EMessageType.MSG_CALL,
+                        value: {
+                            caller: address, // Your wallet address
+                            send: '',        // Specify the sender, usually left empty for calls
+                            pkg_path: Config.REALM_PATH, // Your contract path
+                            func: "GetImages",     // The function you want to call
+                        },
+                    },
+                ];
+
+                // Send the transaction
+                const response = await provider.sendTransaction(stringToBase64(transaction.toString()), TransactionEndpoint.BROADCAST_TX_COMMIT); // Adjust gas limit as needed
+                //const images = parseImageResponse(response.data);
                 setImages(images);
                 resetGame();
             }
@@ -95,6 +106,8 @@ export default function Home() {
             setError("Error fetching images.");
         }
     };
+
+
 
     useEffect(() => {
         fetchImages();
