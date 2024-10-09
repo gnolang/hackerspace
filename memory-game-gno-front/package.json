@@ -11,8 +11,10 @@
   "dependencies": {
     "@adena-wallet/sdk": "^0.0.1",
     "ethers": "^6.13.3",
+    "fast-average-color": "^9.4.0",
     "gno": "^0.0.2",
     "next": "14.2.14",
+    "node-vibrant": "^3.2.1-alpha.1",
     "react": "^18",
     "react-dom": "^18"
   },

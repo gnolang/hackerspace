@@ -15,7 +15,6 @@ export const parseImageResponse = (response: string): string[] => {
     }
 
     const entries = cleanedResponse.split("`").filter(Boolean);
-    console.log('Entries:', entries);
 
     const images: string[] = entries.map(entry => {
 

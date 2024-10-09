@@ -50,7 +50,7 @@ const Leaderboard: React.FC = () => {
         <div className="p-4">
             <h1 className="text-2xl font-bold mb-4">Leaderboard</h1>
             {error && <div className="text-red-500">{error}</div>}
-            <table className="min-w-full border-collapse border border-gray-800 text-center font-sans">
+            <table className="min-w-full border-collapse border bg-slate-800 text-center font-sans">
                 <thead className="bg-gray-800 text-white">
                 <tr>
                     <th className="border border-gray-600 px-4 py-2">Rank</th>
