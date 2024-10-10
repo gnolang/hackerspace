@@ -60,14 +60,12 @@ export default function Home() {
             const selectedRow = Math.floor(selectedIndex / cols);
             const targetRow = Math.floor(targetIndex / cols);
 
-            // Only provide left/right feedback if the selected column is not correct
             if (selectedColumn < targetColumn) {
                 directionFeedback += "The treasure is more to the right.\n";
             } else if (selectedColumn > targetColumn) {
                 directionFeedback += "The treasure is more to the left.\n";
             }
 
-            // Only provide up/down feedback if the selected row is not correct
             if (selectedRow < targetRow) {
                 directionFeedback += "The treasure is further down.\n";
             } else if (selectedRow > targetRow) {

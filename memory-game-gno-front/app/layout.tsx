@@ -6,12 +6,12 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import {useEffect, useState} from "react";
-import { GnoWSProvider } from "@gnolang/gno-js-client";
+import { GnoWSProvider} from "@gnolang/gno-js-client";
 import Config from './config';
 import AccountContext from './context/AccountContext';
 import ProviderContext from './context/ProviderContext';
 import Navbar from "@/app/components/Navbar";
-import {GameModeProvider} from "@/app/context/GameModeContext";
+import {AdenaWalletProvider} from "@adena-wallet/sdk";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -27,17 +27,13 @@ const geistMono = localFont({
 export default function RootLayout({children,}: Readonly<{
     children: React.ReactNode;
 }>) {
-    const [provider, setProvider] = useState<GnoWSProvider | null>(
+    const [provider, setProvider] = useState<GnoWSProvider| null>(
         new GnoWSProvider(Config.CHAIN_RPC)
     );
 
     // Manage the state of user account (address and chainID)
     const [address, setAddress] = useState<string | null>(null);
     const [chainID, setChainID] = useState<string | null>(Config.CHAIN_ID);
-    const [gameMode, setGameMode] = useState<'portal-loop' | 'local'>('local'); // State to manage game mode
-    const toggleGameMode = () => {
-        setGameMode(prevMode => prevMode === 'local' ? 'portal-loop' : 'local');
-    };
 
     // Prepare values to pass to contexts
     const accountContextValue = {
@@ -57,11 +53,9 @@ export default function RootLayout({children,}: Readonly<{
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ProviderContext.Provider value={providerContextValue}>
             <AccountContext.Provider value={accountContextValue}>
-                <GameModeProvider>
                 <Navbar />
                 {children}
                 <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick draggable pauseOnHover />
-                </GameModeProvider>
             </AccountContext.Provider>
         </ProviderContext.Provider>
         </body>
