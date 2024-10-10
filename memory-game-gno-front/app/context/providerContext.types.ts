@@ -1,8 +1,7 @@
 import { GnoWSProvider } from '@gnolang/gno-js-client';
-import {JSONRPCProvider} from "@gnolang/tm2-js-client";
 
 export interface IProviderContext {
-  provider: JSONRPCProvider | null;
+  provider: GnoWSProvider | null;
 
-  setProvider: (provider: JSONRPCProvider) => void;
+  setProvider: (provider: GnoWSProvider) => void;
 }

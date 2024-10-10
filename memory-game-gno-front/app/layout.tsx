@@ -11,7 +11,6 @@ import Config from './config';
 import AccountContext from './context/AccountContext';
 import ProviderContext from './context/ProviderContext';
 import Navbar from "@/app/components/Navbar";
-import {JSONRPCProvider} from "@gnolang/tm2-js-client";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -27,8 +26,8 @@ const geistMono = localFont({
 export default function RootLayout({children,}: Readonly<{
     children: React.ReactNode;
 }>) {
-    const [provider, setProvider] = useState<JSONRPCProvider | null>(
-        new JSONRPCProvider(Config.CHAIN_RPC)
+    const [provider, setProvider] = useState<GnoWSProvider | null>(
+        new GnoWSProvider(Config.CHAIN_RPC)
     );
 
     // Manage the state of user account (address and chainID)
