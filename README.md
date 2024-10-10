@@ -33,7 +33,7 @@ The game ends when:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/matijamarjanovic/imagehunt.git
+   git clone https://github.com/matijamarjanovic/ImageHuntGno.git
    cd imagehunt
    ```
 
