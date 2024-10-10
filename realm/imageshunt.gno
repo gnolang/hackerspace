@@ -1,4 +1,4 @@
-package imghunt
+package imageshunt
 
 import (
     "gno.land/p/demo/avl"
@@ -14,7 +14,7 @@ var (
 func init() {
     scores = *avl.NewTree()
     images = []string{
-        "https://gno.land/static/img/og-gnoland.png",
+        "https://i.ytimg.com/vi/ZI0ZGDMbj-U/maxresdefault.jpg",
         "https://schollz.com/img/gno.png",
         "https://pbs.twimg.com/media/FmxJDJ_XoAAX27f.jpg:large",
         "https://play.gno.land/og-playground-2.png",
@@ -22,10 +22,10 @@ func init() {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXK4i0tjkqCBIE19j2E1-v-Eyigybfkanibw&amp;s",
         "https://airdrops.one/wp-content/uploads/2022/04/gno-land-logo.jpeg",
         "https://img.itch.zone/aW1nLzExMjM5OTM1LnBuZw==/original/vD1tZS.png",
-        "https://avatars.githubusercontent.com/u/75237105?v=4",
+        "https://avatars.githubusercontent.com/u/75237105?s=280&v=4",
         "https://mythicalcreatures.info/media/gnome-mythical-creatures-1200x900.jpg",
         "https://builtin.com/sites/www.builtin.com/files/styles/ckeditor_optimize/public/inline-images/Blockchain%20Technology.jpg",
-        "https://coinbureau.com/_next/image/?url=https%3A%2F%2Fimage.coinbureau.com%2Fstrapi%2FCosmos_Ecosystem_2df2597248.jpg&amp;w=2048&amp;q=50",
+        "https://media.licdn.com/dms/image/v2/D560BAQEyorY16DtXxA/company-logo_200_200/company-logo_200_200/0/1718287623726/gnoland_logo?e=2147483647&v=beta&t=pZQjY9g1yuVDJBJonlbmEIxFtWEGR_3eWIl4ATSllqc",
         "https://cdn.decrypt.co/wp-content/uploads/2020/01/jae-kwon-gID_1.jpg",
         "https://cdn.hashnode.com/res/hashnode/image/upload/v1659512725142/BlwUf2u16.png",
         "https://gnoscan.io/gnoscan-thumb.png",
@@ -36,8 +36,15 @@ func GetSingleImage(index int) string {
     return images[index]
 }
 
-func GetImages() []string {
-    return images
+func GetImages() string {
+    var result string
+    for i, img := range images {
+        if i > 0 {
+            result += "`"
+        }
+        result += img
+    }
+    return result
 }
 
 func Register(address std.Address) {
