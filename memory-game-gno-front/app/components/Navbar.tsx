@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Connect from './Connect';
 import Link from "next/link";
+
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -49,13 +50,16 @@ const Navbar = () => {
                                     Click on an image to guess if it’s the target. If it's not, you'll receive a clue!
                                 </p>
                                 <p className="mb-2">
-                                    Clues will tell you if the target image is brighter, darker, or more colorful than your guess.
+                                    The clue will point you in a direction (left, right, up, or down) towards the target image.
                                 </p>
                                 <p className="mb-2">
-                                    You score points based on how quickly you find the target. Fewer guesses = higher score!
+                                    You score points based on how quickly you find the target. Your score is calculated as the number of images minus the number of guesses.
+                                </p>
+                                <p className="mb-2">
+                                    The game ends when the target image is found or when all guesses are used.
                                 </p>
                                 <p>
-                                    The game ends when the target image is found or all guesses are used.
+                                    You can save your score on the blockchain, and there's a leaderboard of the best scores!
                                 </p>
                             </div>
                         </div>
