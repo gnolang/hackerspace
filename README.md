@@ -53,7 +53,3 @@ The game ends when:
 
 - Players must have the Adena wallet installed and connected to save their scores.
 - After finishing the game, you will be prompted to save your score on-chain, and it will be reflected in the leaderboard.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
