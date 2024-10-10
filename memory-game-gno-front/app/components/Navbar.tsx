@@ -1,10 +1,16 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Connect from './Connect';
-import Link from "next/link"; // Adjust the path as necessary
+import Link from "next/link";
+import {useGameMode} from "@/app/context/GameModeContext"; // Adjust the path as necessary
 
 const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const { gameMode, setGameMode } = useGameMode();
+
+    const toggleGameMode = () => {
+        setGameMode((prevMode:string) => (prevMode === 'portal-loop' ? 'local' : 'portal-loop'));
+    };
 
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
@@ -66,6 +72,14 @@ const Navbar = () => {
                 <Link href={"/leaderboard"}>
                     <button className="text-white focus:outline-none">Leaderboard</button>
                 </Link>
+
+                {/* Game Mode Toggle Button */}
+                <button
+                    className="ml-4 text-white focus:outline-none bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md"
+                    onClick={toggleGameMode}
+                >
+                    {gameMode === 'local' ? 'Switch to Portal-Loop' : 'Switch to Local'}
+                </button>
 
                 <div className="ml-auto">
                     <Connect />

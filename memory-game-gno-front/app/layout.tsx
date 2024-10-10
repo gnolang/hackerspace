@@ -11,6 +11,7 @@ import Config from './config';
 import AccountContext from './context/AccountContext';
 import ProviderContext from './context/ProviderContext';
 import Navbar from "@/app/components/Navbar";
+import {GameModeProvider} from "@/app/context/GameModeContext";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -33,6 +34,10 @@ export default function RootLayout({children,}: Readonly<{
     // Manage the state of user account (address and chainID)
     const [address, setAddress] = useState<string | null>(null);
     const [chainID, setChainID] = useState<string | null>(Config.CHAIN_ID);
+    const [gameMode, setGameMode] = useState<'portal-loop' | 'local'>('local'); // State to manage game mode
+    const toggleGameMode = () => {
+        setGameMode(prevMode => prevMode === 'local' ? 'portal-loop' : 'local');
+    };
 
     // Prepare values to pass to contexts
     const accountContextValue = {
@@ -52,9 +57,11 @@ export default function RootLayout({children,}: Readonly<{
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ProviderContext.Provider value={providerContextValue}>
             <AccountContext.Provider value={accountContextValue}>
+                <GameModeProvider>
                 <Navbar />
                 {children}
                 <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} closeOnClick draggable pauseOnHover />
+                </GameModeProvider>
             </AccountContext.Provider>
         </ProviderContext.Provider>
         </body>
