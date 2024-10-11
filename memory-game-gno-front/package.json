@@ -1,13 +1,14 @@
 {
   "name": "memory-game-gno-front",
   "version": "0.1.0",
+  "homepage": "https://matijamarjanovic.github.io/ImageHuntGno",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "predeploy": "npm run build && next export",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d out"
   },
   "dependencies": {
