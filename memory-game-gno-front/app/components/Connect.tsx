@@ -1,6 +1,5 @@
 // components/Connect.tsx
 import {useState, useContext, useEffect} from 'react';
-import ProviderContext from '../context/ProviderContext';
 import AccountContext from '../context/AccountContext';
 import { AdenaService } from '../adena/adena';
 import Config from '../config';
