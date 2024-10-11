@@ -6,6 +6,8 @@ const nextConfig = {
   images: {
     unoptimized: true, // Disable default image optimization
   },
+  assetPrefix: isProd ? '/ImageHuntGno' : '',
+  basePath: isProd ? '/ImageHuntGno' : '',
   output: 'export'
 };
 
