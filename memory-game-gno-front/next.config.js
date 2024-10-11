@@ -1,4 +1,4 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {};
 
-export default nextConfig;
+module.exports = nextConfig; // Use CommonJS syntax instead of ES module syntax
