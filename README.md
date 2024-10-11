@@ -1,4 +1,3 @@
-
 # Image Hunt
 
 **Image Hunt** is an interactive image-guessing game where players compete to find a hidden target image on a grid. The game features a blockchain-integrated leaderboard for saving high scores, with the backend deployed on the Gno blockchain.
@@ -29,6 +28,10 @@ The game ends when:
 - **Wallet Integration**: Uses the Adena wallet connection, adapted from the Memeland example from the Gno GitHub repository, to manage wallet connection and score saving.
 - **Backend**: Deployed on the Gno blockchain at [`gno.land/r/matijamarjanovic/imageshunt`](https://gno.land/r/matijamarjanovic/imageshunt).
 
+## Live Demo
+
+You can play the game at [Image Hunt](https://image-hunt-gamma.vercel.app/).
+
 ## Installation and Running Locally
 
 1. Clone the repository:
@@ -53,3 +56,7 @@ The game ends when:
 
 - Players must have the Adena wallet installed and connected to save their scores.
 - After finishing the game, you will be prompted to save your score on-chain, and it will be reflected in the leaderboard.
+
+## Contributing
+
+If you’d like to contribute to the project, please fork the repository and create a pull request. Any contributions are welcome!
