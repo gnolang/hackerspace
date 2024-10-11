@@ -32,6 +32,14 @@ The game ends when:
 
 You can play the game at [Image Hunt](https://image-hunt-gamma.vercel.app/).
 
+## Requirements
+
+To save your score on the blockchain, you must have the following:
+
+- **Adena Wallet Extension**: Install the Adena wallet extension in your browser.
+- **Account**: Create an account in the Adena wallet to manage your funds.
+- **Gas Fees**: Ensure you have sufficient funds in your Adena wallet to cover the gas fees for saving your score on-chain.
+
 ## Installation and Running Locally
 
 1. Clone the repository:
