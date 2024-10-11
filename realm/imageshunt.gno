@@ -1,4 +1,4 @@
-package imageshunt
+package imagehuntgame
 
 import (
     "gno.land/p/demo/avl"
@@ -140,7 +140,7 @@ func GetTopScores(n int) []struct {
     }
 
     // Reverse iterate through the tree to get the top scores
-    scores.ReverseIterate("", "", func(key string, value interface{}) bool {
+    scores.Iterate("", "", func(key string, value interface{}) bool {
         topScores = append(topScores, struct {
             address string
             points  int
