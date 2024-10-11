@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Connect = () => {
-    const { provider } = useContext(ProviderContext);
     const { address } = useContext(AccountContext);
     const { setChainID, setAddress } = useContext(AccountContext);
     const [isLoading, setIsLoading] = useState(false);

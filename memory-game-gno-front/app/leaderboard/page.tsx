@@ -1,17 +1,9 @@
 'use client';
 import React, {useContext, useEffect, useState} from 'react';
-import { AdenaService } from '../adena/adena'; // Adjust the path as necessary
-import {EMessageType, IAccountInfo, IAdenaMessage} from "@/app/adena/adena.types";
 import Config from "@/app/config";
 import ProviderContext from "@/app/context/ProviderContext";
 import {parseTopScores} from "@/app/parsers/parseTopScores";
 import {ITopScore} from "@/app/leaderboard/topScore.types";
-import AccountContext from "@/app/context/AccountContext";
-
-interface Score {
-    address: string;
-    points: number;
-}
 
 const Leaderboard: React.FC = () => {
     const [topScores, setTopScores] = useState<ITopScore[]>([]);

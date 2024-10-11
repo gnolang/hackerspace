@@ -5,13 +5,12 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import { GnoWSProvider} from "@gnolang/gno-js-client";
 import Config from './config';
 import AccountContext from './context/AccountContext';
 import ProviderContext from './context/ProviderContext';
 import Navbar from "@/app/components/Navbar";
-import {AdenaWalletProvider} from "@adena-wallet/sdk";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",

@@ -16,7 +16,7 @@ export interface IAdenaResponse {
     status: EAdenaResponseStatus;
     type: EAdenaResponseType;
     message: string;
-    data: null | any;
+    data: null | unknown;
 }
 
 export enum EAccountStatus {

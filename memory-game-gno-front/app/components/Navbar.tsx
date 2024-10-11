@@ -47,7 +47,7 @@ const Navbar = () => {
                                     You will see some images arranged in a grid. One of these images is the target.
                                 </p>
                                 <p className="mb-2">
-                                    Click on an image to guess if it’s the target. If it's not, you'll receive a clue!
+                                    Click on an image to guess if it&apos;s the target. If it&apos;s not, you&apos;ll receive a clue!
                                 </p>
                                 <p className="mb-2">
                                     The clue will point you in a direction (left, right, up, or down) towards the target image.
@@ -59,7 +59,7 @@ const Navbar = () => {
                                     The game ends when the target image is found or when all guesses are used.
                                 </p>
                                 <p>
-                                    You can save your score on the blockchain, and there's a leaderboard of the best scores!
+                                    You can save your score on the blockchain, and there&apos;s a leaderboard of the best scores!
                                 </p>
                             </div>
                         </div>
