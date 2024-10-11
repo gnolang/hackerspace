@@ -13,18 +13,17 @@
     "ethers": "^6.13.3",
     "fast-average-color": "^9.4.0",
     "gno": "^0.0.2",
-    "next": "14.2.14",
     "node-vibrant": "^3.2.1-alpha.1",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
-    "next": "14.2.14",
     "eslint-config-next": "14.2.14",
+    "next": "^14.2.14",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
