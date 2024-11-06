@@ -16,6 +16,12 @@ By default, a snapshots will occur every 4 hours, and will upload it to S3
 docker compose up -d
 ```
 
+## How to force a snapshot now
+
+``` sh
+docker compose exec snapshotter sh /scripts/snapshots.sh
+```
+
 ## TO-DOs
 
 [ ] Prune the node before uploading the snapshots
