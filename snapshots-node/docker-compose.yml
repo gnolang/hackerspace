@@ -2,7 +2,7 @@ name: "gnoland-snapshot-node"
 
 services:
   gnoland:
-    image: "ghcr.io/gnolang/gno/gnoland:0.2.0"
+    image: "ghcr.io/gnolang/gno/gnoland:chain-test4.3"
     entrypoint: ["/scripts/entrypoint.gnoland.sh"]
     ports:
       - 127.0.0.1:26657:26657
