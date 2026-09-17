@@ -2,6 +2,14 @@
 
 **Disclaimer: This repository is an experimental playground for creative ideas, projects, and collaborations. Nothing here is guaranteed to become an official point. For official matters, refer to the main repo at https://github.com/gnolang/gno.**
 
+> [!NOTE]
+> Much of this repo predates gno.land mainnet (`gnoland-1`, live since
+> 12 September 2026) and targets testnets that no longer exist. Treat the
+> contents as historical experiments, and check
+> [Gno networks](https://docs.gno.land/resources/gnoland-networks) for what is
+> actually running before pointing a tool at any endpoint you find here.
+> New to Gno? Start at [gnolang/getting-started](https://github.com/gnolang/getting-started).
+
 Welcome to the Hackerspace repository! This is a dedicated place for tinkerers, builders, and experimenters to freely explore ideas, track projects, and pursue individual and collaborative initiatives with fewer constraints compared to the main repository.
 
 ## Goal
